@@ -1,5 +1,5 @@
 {
-  "name": "querymen",
+  "name": "@samdbox/querymen",
   "version": "2.1.3",
   "description": "Querystring parser middleware for MongoDB, Express and Nodejs",
   "main": "dist/index.js",
@@ -30,6 +30,9 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/samdbox/querymen.git"
+  },
+  "publishConfig": { 
+    "registry": "https://npm.pkg.github.com/" 
   },
   "keywords": [
     "mongo",
