@@ -29,7 +29,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/diegohaz/querymen.git"
+    "url": "git+https://github.com/samdbox/querymen.git"
   },
   "keywords": [
     "mongo",
@@ -42,12 +42,12 @@
     "expressjs",
     "nodejs"
   ],
-  "author": "Diego Haz <hazdiego@gmail.com>",
+  "author": "Jae-Cheol Lee <jclee.dev@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/diegohaz/querymen/issues"
+    "url": "https://github.com/samdbox/querymen/issues"
   },
-  "homepage": "https://github.com/diegohaz/querymen#readme",
+  "homepage": "https://github.com/samdbox/querymen#readme",
   "devDependencies": {
     "babel-cli": "^6.7.5",
     "babel-core": "^6.7.6",
@@ -68,7 +68,8 @@
     "supertest": "^3.0.0",
     "tap-spec": "^4.1.1",
     "tape": "^4.6.0",
-    "watch": "^1.0.1"
+    "watch": "^1.0.1",
+    "mongodb-memory-server": "^6.2.3"
   },
   "dependencies": {
     "lodash": "^4.11.1",

@@ -92,20 +92,35 @@ export default class QuerymenSchema {
           return query
         }
       },
-      page: {
+      // page: {
+      //   type: Number,
+      //   default: 1,
+      //   max: 30,
+      //   min: 1,
+      //   bindTo: 'cursor',
+      //   parse: (value, path, operator, param) => {
+      //     return {skip: this.param('limit').value() * (value - 1)}
+      //   }
+      // },
+      // limit: {
+      //   type: Number,
+      //   default: 30,
+      //   max: 100,
+      //   min: 1,
+      //   bindTo: 'cursor',
+      //   parse: (value) => ({limit: value})
+      // },
+      start: {
         type: Number,
-        default: 1,
-        max: 30,
-        min: 1,
+        default: 0,
+        max: 9999,
+        min: 0,
         bindTo: 'cursor',
-        parse: (value, path, operator, param) => {
-          return {skip: this.param('limit').value() * (value - 1)}
-        }
+        parse: (value) => ({skip: value})
       },
-      limit: {
+      count: {
         type: Number,
-        default: 30,
-        max: 100,
+        default: 10,
         min: 1,
         bindTo: 'cursor',
         parse: (value) => ({limit: value})

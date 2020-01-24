@@ -29,7 +29,7 @@ test('QuerymenSchema add', (t) => {
   t.same(add('123,456', [Number]), [123, 456], 'should add a param with type option number array')
   t.same(add('123,0', [Boolean]), [true, false], 'should add a param with type option boolean array')
   t.same(add('2016,2017', [Date]), [new Date('2016'), new Date('2017')], 'should add a param with type option date array')
-  t.same(add('123,456', [RegExp]), [/123/i, /123/i], 'should add a param with type option regexp array')
+  t.same(add('123,456', [RegExp]), [/123/i, /456/i], 'should add a param with type option regexp array')
   t.end()
 })
 
@@ -143,7 +143,7 @@ test('QuerymenSchema default parse', (t) => {
   t.same(parse({fields: '-id'}).select, {_id: 0}, 'should parse fields=id to fields=_id')
   t.same(parse({fields: 'id'}).select, {_id: 1}, 'should parse fields=id to fields=_id')
   t.same(parse({fields: '-a,b,+c'}).select, {a: 0, b: 1, c: 1}, 'should parse multiple select')
-  t.same(parse({page: 2, limit: 10}).cursor.skip, 10, 'should parse page')
+  t.same(parse({start: 10, count: 10}).cursor.skip, 10, 'should parse page')
   t.same(parse({limit: 10}).cursor.limit, 10, 'should parse limit')
   t.same(parse({sort: ''}).cursor.sort, {createdAt: -1}, 'should not parse empty sort')
   t.same(parse({sort: '-a'}).cursor.sort, {a: -1}, 'should parse sort')

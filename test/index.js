@@ -1,46 +1,59 @@
 import request from 'supertest'
 import express from 'express'
 import mongoose from 'mongoose'
+import MongodbMemoryServer from 'mongodb-memory-server'
 import test from 'tape'
 import querymen from '../src'
 import './querymen-param'
 import './querymen-schema'
 
-mongoose.connect('mongodb://localhost/querymen-test')
+let mongoServer, testSchema, Entity, Test, route
 
-const entitySchema = mongoose.Schema({})
-const testSchema = mongoose.Schema({
-  title: String,
-  entity: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Entity'
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now
-  },
-  location: {
-    type: [Number],
-    index: '2d'
-  }
-})
-
-const Entity = mongoose.model('Entity', entitySchema)
-const Test = mongoose.model('Test', testSchema)
-
-const route = (...args) => {
-  const app = express()
-  app.get('/tests', querymen.middleware(...args), (req, res) => {
-    Test.find(req.querymen.query, req.querymen.select, req.querymen.cursor).then((items) => {
-      res.status(200).json(items)
-    }).catch((err) => {
-      res.status(500).send(err)
-    })
+test('setup', async (t) => {
+  mongoServer = new MongodbMemoryServer()
+  const mongoUri = await mongoServer.getConnectionString()
+  await mongoose.connect(mongoUri, (err) => {
+    if (err) console.error(err)
   })
 
-  app.use(querymen.errorHandler())
-  return app
-}
+  const entitySchema = mongoose.Schema({})
+  testSchema = mongoose.Schema({
+    title: String,
+    entity: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Entity'
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now
+    },
+    location: {
+      type: [Number],
+      index: '2d'
+    }
+  })
+
+  Entity = mongoose.model('Entity', entitySchema)
+  Test = mongoose.model('Test', testSchema)
+
+  route = (...args) => {
+    const app = express()
+    app.get('/tests', querymen.middleware(...args), (req, res) => {
+      Test.find(req.querymen.query, req.querymen.select, req.querymen.cursor).then((items) => {
+        res.status(200).json(items)
+      }).catch((err) => {
+        res.status(500).send(err)
+      })
+    })
+
+    app.use(querymen.errorHandler())
+    return app
+  }
+
+  t.end()
+})
+
+// mongoose.connect('mongodb://localhost/querymen-test')
 
 test('Querymen handler', (t) => {
   t.notOk(querymen.parser('testParser'), 'should not get nonexistent parser')
@@ -96,11 +109,11 @@ test('Querymen middleware', (t) => {
 
     request(app)
       .get('/tests')
-      .query({page: 50})
+      .query({start: 10000})
       .expect(400)
       .end((err, res) => {
         if (err) throw err
-        t.equal(res.body.param, 'page', 'should respond with error object')
+        t.equal(res.body.param, 'start', 'should respond with error object')
       })
 
     request(app)
@@ -175,6 +188,7 @@ test('Querymen middleware', (t) => {
   })
 })
 
-test.onFinish(() => {
-  mongoose.disconnect()
+test.onFinish(async () => {
+  await mongoose.disconnect()
+  await mongoServer.stop()
 })
