@@ -31,9 +31,6 @@
     "type": "git",
     "url": "git://github.com/samdbox/querymen.git"
   },
-  "publishConfig": { 
-    "registry": "https://npm.pkg.github.com/"
-  },
   "keywords": [
     "mongo",
     "express",
